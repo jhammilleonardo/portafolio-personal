@@ -1,0 +1,110 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Light Mode: Clean, Soft, Warm */
+    --bg: #ffffff;
+    --surface: #ffffff; /* White surface on white bg for clean look */
+    --surface-hover: #fafafa;
+    --border: #f4f4f5; /* Very subtle */
+    --text: #18181b;
+    --text-muted: #71717a;
+    --shadow-soft: 0 10px 40px -10px rgba(0,0,0,0.08);
+  }
+
+  .dark {
+    /* Dark Mode: Deep, Glassy, Premium */
+    --bg: #050505; /* True Black */
+    --surface: rgba(255, 255, 255, 0.03); /* Glassy */
+    --surface-hover: rgba(255, 255, 255, 0.08);
+    --border: rgba(255, 255, 255, 0.05);
+    --text: #ffffff;
+    --text-muted: #a1a1aa;
+    --shadow-soft: 0 0 0 0 transparent;
+  }
+
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+  }
+
+  body {
+    background-color: var(--bg);
+    color: var(--text);
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    line-height: 1.6;
+    overflow-x: hidden;
+    transition: background-color 0.5s cubic-bezier(0.32, 0.72, 0, 1), color 0.5s ease;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+}
+
+@layer components {
+  .section-padding {
+    @apply py-24 px-4 sm:px-6 lg:px-8;
+  }
+
+  .container-max {
+    @apply max-w-7xl mx-auto; /* Wider container for modern look */
+  }
+
+  /* Premium Card Styles */
+  .card-modern {
+    @apply bg-surface border border-border transition-all duration-300;
+    box-shadow: var(--shadow-soft);
+  }
+  
+  .dark .card-modern {
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+}
+
+/* Animations */
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.animate-marquee {
+  animation: marquee 60s linear infinite; /* Slower, smoother */
+}
+
+/* Masking for Carousels (Fade edges) */
+.mask-edges {
+  mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+  -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+}
+
+/* Noise Texture (Subtle) */
+.noise-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  opacity: 0.03; /* Very subtle */
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+}
+
+/* Scrollbar Hiding */
+.scrollbar-hide::-webkit-scrollbar { display: none; }
+.scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+
+/* Text Stroke */
+.text-stroke-light { -webkit-text-stroke: 1px rgba(0,0,0,0.08); color: transparent; }
+.dark .text-stroke-dark { -webkit-text-stroke: 1px rgba(255,255,255,0.15); color: transparent; }

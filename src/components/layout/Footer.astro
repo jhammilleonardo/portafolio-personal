@@ -1,0 +1,17 @@
+---
+const year = new Date().getFullYear();
+---
+
+<footer class="border-t border-border py-10 px-4 bg-bg transition-colors duration-300">
+  <div class="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+    <p class="text-text-muted text-sm font-medium">
+      © {year} — Construido con
+      <span class="text-text font-semibold">Astro + React</span>
+    </p>
+    <div class="flex items-center gap-4">
+      <a href="/#about" class="text-text-muted hover:text-text text-sm transition-colors font-medium">Sobre mí</a>
+      <a href="/#projects" class="text-text-muted hover:text-text text-sm transition-colors font-medium">Proyectos</a>
+      <a href="/#contact" class="text-text-muted hover:text-text text-sm transition-colors font-medium">Contacto</a>
+    </div>
+  </div>
+</footer>

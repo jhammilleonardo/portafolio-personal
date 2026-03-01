@@ -1,0 +1,1 @@
+import"./hoisted.ojoH_jcI.js";const t=new IntersectionObserver(e=>e.forEach(r=>{r.isIntersecting&&r.target.classList.add("visible")}),{threshold:.1});document.querySelectorAll("#certifications .fade-in-up").forEach(e=>t.observe(e));

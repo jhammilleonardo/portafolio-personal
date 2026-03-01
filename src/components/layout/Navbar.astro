@@ -1,0 +1,111 @@
+---
+import ThemeToggle from '../ui/ThemeToggle.astro';
+
+const navLinks = [
+  { href: '/#about', label: 'Sobre mí' },
+  { href: '/#skills', label: 'Skills' },
+  { href: '/#projects', label: 'Proyectos' },
+  { href: '/#certifications', label: 'Certificaciones' },
+  { href: '/#contact', label: 'Contacto' },
+];
+---
+
+<header id="navbar" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+    <nav class="flex items-center justify-between h-16">
+      <!-- Logo -->
+      <a href="/" class="font-grotesk font-bold text-xl text-text hover:text-accent-cyan transition-colors">
+        &lt;Dev/&gt;
+      </a>
+
+      <!-- Desktop nav -->
+      <ul class="hidden md:flex items-center gap-1">
+        {navLinks.map(link => (
+          <li>
+            <a
+              href={link.href}
+              class="px-4 py-2 rounded-lg text-sm text-text-muted hover:text-text hover:bg-black/5 dark:hover:bg-white/5 transition-all duration-200 font-medium"
+            >
+              {link.label}
+            </a>
+          </li>
+        ))}
+      </ul>
+
+      <div class="hidden md:flex items-center gap-4">
+        <ThemeToggle />
+        <!-- CTA -->
+        <a
+          href="/#contact"
+          class="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium bg-text text-bg hover:opacity-90 transition-all duration-200 shadow-lg shadow-black/10 dark:shadow-white/5"
+        >
+          Hablemos
+        </a>
+      </div>
+
+      <!-- Mobile actions -->
+      <div class="flex items-center gap-4 md:hidden">
+        <ThemeToggle />
+        <!-- Mobile menu button -->
+        <button id="mobile-menu-btn" class="p-2 rounded-lg text-text-muted hover:text-text hover:bg-black/5 dark:hover:bg-white/5" aria-label="Menu">
+          <svg id="icon-open" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+          </svg>
+          <svg id="icon-close" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="hidden">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+          </svg>
+        </button>
+      </div>
+    </nav>
+  </div>
+
+  <!-- Mobile menu -->
+  <div id="mobile-menu" class="hidden md:hidden border-t border-border bg-bg/95 backdrop-blur-xl">
+    <ul class="max-w-6xl mx-auto px-4 py-4 flex flex-col gap-1">
+      {navLinks.map(link => (
+        <li>
+          <a
+            href={link.href}
+            class="mobile-nav-link block px-4 py-2.5 rounded-lg text-text-muted hover:text-text hover:bg-black/5 dark:hover:bg-white/5 transition-all font-medium"
+          >
+            {link.label}
+          </a>
+        </li>
+      ))}
+    </ul>
+  </div>
+</header>
+
+<script>
+  const navbar = document.getElementById('navbar');
+  const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+  const mobileMenu = document.getElementById('mobile-menu');
+  const iconOpen = document.getElementById('icon-open');
+  const iconClose = document.getElementById('icon-close');
+
+  // Scroll effect
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 20) {
+      navbar?.classList.add('bg-bg/80', 'backdrop-blur-xl', 'border-b', 'border-border');
+    } else {
+      navbar?.classList.remove('bg-bg/80', 'backdrop-blur-xl', 'border-b', 'border-border');
+    }
+  });
+
+  // Mobile toggle
+  mobileMenuBtn?.addEventListener('click', () => {
+    const isOpen = !mobileMenu?.classList.contains('hidden');
+    mobileMenu?.classList.toggle('hidden');
+    iconOpen?.classList.toggle('hidden', !isOpen);
+    iconClose?.classList.toggle('hidden', isOpen);
+  });
+
+  // Close mobile menu on nav link click
+  document.querySelectorAll('.mobile-nav-link').forEach(link => {
+    link.addEventListener('click', () => {
+      mobileMenu?.classList.add('hidden');
+      iconOpen?.classList.remove('hidden');
+      iconClose?.classList.add('hidden');
+    });
+  });
+</script>

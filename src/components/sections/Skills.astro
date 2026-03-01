@@ -1,0 +1,124 @@
+---
+import type { SkillsByCategory } from '../../types';
+
+interface Props {
+  skillsByCategory: SkillsByCategory;
+}
+
+const { skillsByCategory } = Astro.props;
+const allSkills = Object.values(skillsByCategory).flat();
+
+// Split skills into two rows for a dynamic effect
+const half = Math.ceil(allSkills.length / 2);
+const row1 = [...allSkills.slice(0, half), ...allSkills.slice(0, half)]; // Duplicate for loop
+const row2 = [...allSkills.slice(half), ...allSkills.slice(half)]; // Duplicate for loop
+
+const iconMapping: Record<string, string> = {
+  'nextjs': 'nextdotjs',
+  'nodejs': 'nodedotjs',
+  'tailwind': 'tailwindcss',
+  'github-actions': 'githubactions',
+  'ci/cd': 'githubactions', // Fallback
+};
+
+const getIconUrl = (icon: string) => {
+  const slug = iconMapping[icon] || icon;
+  return `https://cdn.simpleicons.org/${slug}`;
+};
+---
+
+<section id="skills" class="py-32 relative overflow-hidden bg-bg transition-colors duration-500">
+  <div class="container-max mb-16 px-4 text-center relative z-10">
+    <h2 class="text-4xl md:text-5xl font-grotesk font-bold text-text mb-6 tracking-tight">
+      Tech <span class="text-text-muted">Stack</span>
+    </h2>
+    <p class="text-text-muted max-w-lg mx-auto text-lg">
+      The tools and technologies I use to build scalable, high-performance applications.
+    </p>
+  </div>
+
+  <!-- Carousel Container with Fade Edges -->
+  <div class="flex flex-col gap-6 mask-edges relative z-10 py-4">
+    
+    <!-- Row 1: Left to Right -->
+    <div class="flex w-max animate-marquee-left hover:pause gap-4">
+      {row1.map((skill) => (
+        <div 
+          class="group relative flex items-center gap-3 px-6 py-3 rounded-full bg-bg border border-border shadow-sm transition-all duration-300 hover:scale-105 cursor-default hover:border-[var(--skill-color)] hover:shadow-md"
+          style={`--skill-color: ${skill.color || '#333'}`}
+        >
+          <div class="w-8 h-8 flex items-center justify-center shrink-0 transition-all duration-300 grayscale opacity-80 group-hover:grayscale-0 group-hover:opacity-100">
+            {skill.icon ? (
+              <img 
+                src={getIconUrl(skill.icon)} 
+                alt={skill.name} 
+                class="w-6 h-6 object-contain"
+                loading="lazy"
+              />
+            ) : (
+              <div class="w-full h-full rounded-full bg-text text-bg flex items-center justify-center text-xs font-bold">
+                 {skill.name.substring(0,1)}
+              </div>
+            )}
+          </div>
+          
+          <span class="text-sm font-semibold text-text transition-colors duration-300 group-hover:text-[var(--skill-color)] whitespace-nowrap">
+            {skill.name}
+          </span>
+        </div>
+      ))}
+    </div>
+
+    <!-- Row 2: Right to Left -->
+    <div class="flex w-max animate-marquee-right hover:pause gap-4">
+      {row2.map((skill) => (
+        <div 
+          class="group relative flex items-center gap-3 px-6 py-3 rounded-full bg-bg border border-border shadow-sm transition-all duration-300 hover:scale-105 cursor-default hover:border-[var(--skill-color)] hover:shadow-md"
+          style={`--skill-color: ${skill.color || '#333'}`}
+        >
+          <div class="w-8 h-8 flex items-center justify-center shrink-0 transition-all duration-300 grayscale opacity-80 group-hover:grayscale-0 group-hover:opacity-100">
+            {skill.icon ? (
+              <img 
+                src={getIconUrl(skill.icon)} 
+                alt={skill.name} 
+                class="w-6 h-6 object-contain"
+                loading="lazy"
+              />
+            ) : (
+              <div class="w-full h-full rounded-full bg-text text-bg flex items-center justify-center text-xs font-bold">
+                 {skill.name.substring(0,1)}
+              </div>
+            )}
+          </div>
+          
+          <span class="text-sm font-semibold text-text transition-colors duration-300 group-hover:text-[var(--skill-color)] whitespace-nowrap">
+            {skill.name}
+          </span>
+        </div>
+      ))}
+    </div>
+
+  </div>
+</section>
+
+<style>
+  @keyframes marqueeLeft {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+  @keyframes marqueeRight {
+    0% { transform: translateX(-50%); }
+    100% { transform: translateX(0); }
+  }
+  
+  .animate-marquee-left {
+    animation: marqueeLeft 80s linear infinite;
+  }
+  .animate-marquee-right {
+    animation: marqueeRight 80s linear infinite;
+  }
+  
+  .hover\:pause:hover {
+    animation-play-state: paused;
+  }
+</style>

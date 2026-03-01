@@ -1,0 +1,20 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Certifications from '../components/sections/Certifications.astro';
+import type { Certification } from '../types';
+
+let certifications: Certification[] = [];
+
+try {
+  const { query } = await import('../lib/db');
+  certifications = await query<Certification>('SELECT * FROM certifications ORDER BY issue_date DESC');
+} catch {
+  // fallback vacío
+}
+---
+
+<BaseLayout title="Certificaciones | Portafolio" description="Mis certificaciones y cursos completados.">
+  <div class="pt-20">
+    <Certifications certifications={certifications} />
+  </div>
+</BaseLayout>

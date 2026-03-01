@@ -1,0 +1,101 @@
+---
+import type { Profile } from '../../types';
+
+interface Props {
+  profile: Profile | null;
+}
+
+const { profile } = Astro.props;
+const name = profile?.name ?? 'Tu Nombre';
+const title = profile?.title ?? 'Full Stack Developer';
+---
+
+<section id="hero" class="relative min-h-screen flex flex-col justify-center items-center overflow-hidden bg-bg">
+  <!-- Dynamic Background -->
+  <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-surface via-bg to-bg z-0 opacity-80 dark:opacity-20"></div>
+  
+  <!-- Grid Pattern -->
+  <div class="absolute inset-0 z-0 opacity-[0.03] dark:opacity-[0.05]" style="background-image: radial-gradient(var(--text) 1px, transparent 1px); background-size: 32px 32px; mask-image: radial-gradient(circle at center, black, transparent);"></div>
+
+  <!-- Parallax Content -->
+  <div class="z-10 text-center px-4 max-w-5xl mx-auto parallax-container">
+    
+    <!-- Animated Status Badge -->
+    {!!profile?.available_for_work && (
+      <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-border bg-surface/50 backdrop-blur-md mb-8 fade-in-up" style="animation-delay: 0.1s">
+        <span class="relative flex h-2 w-2">
+          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+          <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+        </span>
+        <span class="text-xs font-medium tracking-wide text-text-muted uppercase">Available for work</span>
+      </div>
+    )}
+
+    <!-- Mega Typography -->
+    <h1 class="font-grotesk font-black text-6xl sm:text-8xl md:text-9xl tracking-tighter leading-[0.9] mb-6 text-text fade-in-up mix-blend-normal dark:mix-blend-lighten" style="animation-delay: 0.2s">
+      {name.split(' ')[0]}<br />
+      <span class="text-stroke-dynamic text-transparent hover:text-text/5 transition-colors duration-500">{name.split(' ').slice(1).join(' ')}</span>
+    </h1>
+
+    <!-- Minimal Description -->
+    <p class="font-inter text-xl sm:text-2xl text-text-muted max-w-2xl mx-auto font-light mb-10 fade-in-up" style="animation-delay: 0.4s">
+      {title} focused on crafting <span class="text-text font-medium italic">immersive</span> digital experiences.
+    </p>
+
+    <!-- Magnetic Buttons -->
+    <div class="flex flex-col sm:flex-row items-center justify-center gap-6 fade-in-up" style="animation-delay: 0.6s">
+      <a href="#projects" class="group relative px-8 py-4 bg-text text-bg rounded-full font-bold overflow-hidden transition-transform hover:scale-105 shadow-xl shadow-text/10">
+        <span class="relative z-10 flex items-center gap-2">
+          View Selected Works
+          <svg class="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+        </span>
+      </a>
+      
+      <a href="#contact" class="group px-8 py-4 text-text hover:text-text-muted transition-colors">
+        <span class="border-b border-border pb-1 group-hover:border-text transition-colors">Let's talk</span>
+      </a>
+    </div>
+  </div>
+
+  <!-- Scroll Indicator -->
+  <div class="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-40">
+    <span class="text-[10px] uppercase tracking-[0.2em] text-text">Scroll</span>
+    <div class="w-[1px] h-12 bg-gradient-to-b from-text to-transparent"></div>
+  </div>
+</section>
+
+<style>
+  .text-stroke-dynamic {
+    -webkit-text-stroke: 1px #000000;
+    color: transparent;
+  }
+  
+  :global(.dark) .text-stroke-dynamic {
+    -webkit-text-stroke: 1px #ffffff;
+    color: transparent;
+  }
+</style>
+
+<script>
+  // Fade in animation
+  const observer = new IntersectionObserver(
+    (entries) => entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); }),
+    { threshold: 0.1 }
+  );
+  document.querySelectorAll('#hero .fade-in-up').forEach(el => observer.observe(el));
+
+  // Simple Parallax Effect
+  document.addEventListener('scroll', () => {
+    const scrolled = window.scrollY;
+    const hero = document.querySelector('#hero') as HTMLElement;
+    const content = document.querySelector('.parallax-container') as HTMLElement;
+    
+    if (hero && content) {
+      const limit = hero.offsetHeight;
+      if (scrolled < limit) {
+        content.style.transform = `translateY(${scrolled * 0.3}px)`;
+        content.style.opacity = `${1 - scrolled / (limit * 0.8)}`;
+      }
+    }
+  });
+</script>
