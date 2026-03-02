@@ -19,14 +19,16 @@ export const POST: APIRoute = async ({ request }) => {
     const buffer = Buffer.from(await file.arrayBuffer());
     const ext = path.extname(file.name);
     const filename = `${Date.now()}-${Math.random().toString(36).substring(7)}${ext}`;
-    const uploadDir = path.join(process.cwd(), 'public', 'uploads');
-    
+
+    // En producción (Docker/Coolify) los estáticos se sirven desde dist/client/
+    // En desarrollo se sirven desde public/
+    const isProduction = import.meta.env.PROD;
+    const uploadDir = isProduction
+      ? path.join(process.cwd(), 'dist', 'client', 'uploads')
+      : path.join(process.cwd(), 'public', 'uploads');
+
     // Ensure directory exists
-    try {
-      await fs.access(uploadDir);
-    } catch {
-      await fs.mkdir(uploadDir, { recursive: true });
-    }
+    await fs.mkdir(uploadDir, { recursive: true });
 
     const filePath = path.join(uploadDir, filename);
     await fs.writeFile(filePath, buffer);

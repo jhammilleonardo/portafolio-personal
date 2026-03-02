@@ -108,36 +108,21 @@ export function ProfileManager() {
       completedCrop.height
     );
 
-    canvas.toBlob(async (blob) => {
-      if (!blob) return;
-      
-      setUploading(true);
-      setShowCropModal(false);
-      
-      const formData = new FormData();
-      formData.append('file', blob, 'avatar.jpg');
-
-      try {
-        const res = await fetch('/api/admin/upload', {
-          method: 'POST',
-          body: formData,
-        });
-        const data = await res.json();
-        if (data.url) {
-          setProfile(prev => ({ ...prev, avatar_url: data.url }));
-          setMsg('Imagen subida correctamente');
-        } else {
-          setMsg(data.error || 'Error al subir imagen');
-        }
-      } catch (error) {
-        console.error(error);
-        setMsg('Error al subir imagen');
-      } finally {
-        setUploading(false);
-        if (fileInputRef.current) fileInputRef.current.value = '';
-        setTimeout(() => setMsg(''), 3000);
-      }
-    }, 'image/jpeg', 0.95);
+    // Convertir directamente a Base64 y guardar en BD (sin sistema de archivos)
+    const base64 = canvas.toDataURL('image/jpeg', 0.85);
+    setUploading(true);
+    setShowCropModal(false);
+    try {
+      setProfile(prev => ({ ...prev, avatar_url: base64 }));
+      setMsg('Imagen lista. Guarda el perfil para confirmar.');
+    } catch (error) {
+      console.error(error);
+      setMsg('Error al procesar imagen');
+    } finally {
+      setUploading(false);
+      if (fileInputRef.current) fileInputRef.current.value = '';
+      setTimeout(() => setMsg(''), 4000);
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
